@@ -1,0 +1,221 @@
+/* General Body Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 10px;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden; /* Prevents scrollbars on iPad */
+}
+
+/* Background Slideshow Container */
+#background-slideshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+#slideshow-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Change from cover to contain */
+    transition: opacity 1s ease-in-out; /* Fade transition */
+}
+
+/* Dark overlay for readability */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+/* Dashboard Grid Layout - now a flex container at the bottom */
+#dashboard-grid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+/* General Widget Styles */
+.widget {
+    background-color: rgba(0, 0, 0, 0.35); /* Slightly more background for readability */
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-shrink: 0; /* Prevent widgets from shrinking */
+}
+
+/* New styles for time/date inside weather widget */
+#time {
+    font-size: 1.8rem; /* Smaller font */
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+#date {
+    font-size: 0.8rem; /* Smaller font */
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+/* Weather Widget */
+#weather-widget {
+    font-size: 1rem; /* Base font size */
+    display: flex;
+    flex-direction: column; /* Stack main content and hourly forecast vertically */
+    gap: 10px;
+    padding: 15px 25px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+#weather-widget::after {
+    content: '^';
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.5);
+    transform: rotate(180deg);
+    transition: transform 0.4s ease;
+}
+
+#weather-widget.expanded::after {
+    transform: rotate(0deg);
+}
+
+.main-weather-content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; /* Make children fill height */
+    gap: 20px;
+}
+
+.current-weather-side {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding-right: 20px;
+}
+
+.weather-icon-large {
+    font-size: 3rem;
+}
+
+.temp-large {
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.location-info {
+    text-align: left;
+}
+
+.wind-info {
+    font-size: 0.8rem;
+    color: #c0c0c0;
+}
+
+.forecast-side {
+    display: flex;
+    gap: 20px;
+}
+
+.forecast-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.weather-icon-small {
+    font-size: 1.8rem;
+}
+
+/* Hourly Forecast Styling */
+.hourly-forecast {
+    display: flex;
+    gap: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+}
+
+#weather-widget.expanded .hourly-forecast {
+    max-height: 130px; /* Increased height to reveal the content */
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+}
+
+.hourly-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    min-width: 50px; /* Give items a minimum width */
+}
+
+.hourly-wind {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+}
+
+.wind-arrow {
+    display: inline-block; /* Needed for transform to work */
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Floating Controls */
+#controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+#upload-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    line-height: 60px;
+    background-color: rgba(0, 122, 255, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    padding: 0;
+}
+
+#upload-btn:hover {
+    background-color: #005ecb;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>信息面板</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Background Slideshow -->
+    <div id="background-slideshow">
+        <img id="slideshow-image" src="" alt="Background Image">
+    </div>
+
+    <!-- Main Content Grid -->
+    <div id="dashboard-grid">
+        <div class="widget" id="weather-widget">
+            <p>正在加载天气...</p>
+        </div>
+    </div>
+
+    <!-- Floating Upload Button -->
+    <div id="controls">
+        <button id="upload-btn">+</button>
+        <input type="file" id="image-upload" multiple accept="image/*" style="display: none;">
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
