@@ -1,65 +1,87 @@
 # 信息面板 (Personal Dashboard)
 
-这是一个轻量级的、无需后端、可本地运行的个人信息面板网页。它被设计用来在像旧款 iPad 这样的设备上全屏运行，作为一个信息中心或动态数字相框。
+**线上访问地址: [https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
+
+这是一个轻量级的、无需后端、可本地运行的个人信息面板网页。项目的主要目标是将旧的、性能不足的平板设备（如第一代 iPad mini）改造为一个功能丰富的**电子相册**和信息中心。
 
 ## ✨ 功能特性
 
-- **纯前端实现**: 无需编译或后端服务器，下载后可直接在浏览器中本地运行。
-- **全屏背景轮播**: 支持用户上传一张或多张本地图片作为背景，并进行淡入淡出轮播，实现动态数字相框效果。
-- **集成信息组件**: 一个悬浮于屏幕底部的多功能组件，整合了时钟和天气信息，最大化背景可视区域。
-- **实时时钟**: 在天气组件中实时显示当前日期、星期和精确到秒的时间。
-- **强大的天气模块**: 
+- **变废为宝**: 专为旧设备和老版本浏览器优化，让您闲置的旧平板重新焕发价值。
+- **全屏电子相册**: 支持用户上传一张或多张本地图片作为背景，并进行淡入淡出轮播。
+- **集成信息组件**: 一个悬浮于屏幕底部的多功能组件，整合了时钟和天气信息。
+- **实时时钟**: 实时显示当前日期、星期和精确到秒的时间。
+- **天气模块**: 
     - **固定地点**: 天气数据固定为丹麦哥本哈根。
-    - **当前实况**: 显示当前天气图标、温度、风向和风速 (m/s)。
-    - **三日预报**: 简洁地展示未来三天的天气趋势（天气图标、最高/最低温度）。
-    - **可交互的小时预报**: 
-        - 点击天气组件可**展开/收起**详细的小时预报视图。
-        - 小时预报显示从**当前小时开始的未来8小时**的滚动数据。
-        - 每小时的预报都包含天气图标、温度、风向箭头和风速。
+    - **当前实况**: 显示当前天气、温度、风向和风速 (m/s)。
+    - **三日预报**: 简洁地展示未来三天的天气趋势。
+    - **可交互的小时预报**: 点击可展开/收起从当前小时开始的未来8小时的滚动预报。
 
 ## 🚀 如何使用
 
-1.  确保 `dashboard.html`, `dashboard.css`, 和 `dashboard.js` 三个文件在同一个文件夹内。
-2.  在现代网页浏览器 (如 Chrome, Firefox, Safari) 中打开 `dashboard.html` 文件。
-3.  点击右下角的 `+` 按钮上传您自己的背景图片。
-4.  点击天气组件区域可展开或收起小时预报。
+1.  在您的设备（尤其是旧 iPad）的浏览器中，直接访问线上地址： **[https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
+2.  点击右下角的 `+` 按钮上传您自己的照片。
+3.  点击天气组件区域可展开或收起小时预报。
+3.  **推荐**: 使用浏览器的“添加到主屏幕”功能，将此页面在桌面上生成一个图标，方便日后像 App 一样直接打开。
+
+## 兼容性说明
+
+本项目为了能成功运行在第一代 iPad mini (iOS 9.3.5) 等极端老旧的设备上，进行了深度的兼容性改造：
+
+- **代码标准**: 整体 JavaScript 代码已用 ES5 标准重写，替换了所有现代浏览器中的新语法（如 `fetch`, `let`, `const`, `=>` 等）。
+- **CSS 兼容**: 移除了 `backdrop-filter` 等性能敏感的特效，并为 Flexbox 布局添加了 `-webkit-` 前缀以兼容旧版 Safari。
+- **功能权衡**: 项目曾尝试加入根据设备方向自动切换布局的功能，但测试证明该功能对旧设备负担过重，会导致脚本崩溃。因此，**该功能已被移除**，以保证核心功能的稳定运行。
 
 ## 🛠️ 技术栈
 
 - **HTML5**
-- **CSS3**: Flexbox, Grid, Transitions, Animations, `backdrop-filter`
-- **原生 JavaScript (ES6+)**: `fetch` API, `File` API, `URL.createObjectURL`
+- **CSS3**: Flexbox (带 `-webkit-` 前缀), Transitions
+- **原生 JavaScript (ES5)**: `XMLHttpRequest`
+
+## 未来计划 (Roadmap)
+
+- **用户自定义位置**: 新增“定位”功能，允许用户授权浏览器获取当前位置，并自动加载当地的天气状况。位置信息将被本地保存，无需重复设置。
 
 ---
 
 # Personal Dashboard (English Version)
 
-A lightweight, serverless, locally-run personal dashboard webpage. It is designed to run full-screen on devices like an old iPad, serving as an information hub or a dynamic digital picture frame.
+**Live Demo: [https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
+
+A lightweight, serverless, locally-run personal dashboard webpage. The primary goal of this project is to repurpose old, underpowered tablet devices (like the original iPad mini) into a feature-rich **digital photo frame** and information hub.
 
 ## ✨ Features
 
-- **Pure Frontend**: No build process or backend server required. Runs locally in any modern browser right after download.
-- **Full-Screen Background Slideshow**: Allows users to upload one or more local images to be used as a background slideshow with a fade-in/fade-out effect, acting as a digital picture frame.
-- **Integrated Info Widget**: A single, floating multi-function widget at the bottom of the screen that combines the clock and weather, maximizing the visible area for the background images.
-- **Real-time Clock**: Displays the current date, day of the week, and time (down to the second) within the weather widget.
-- **Powerful Weather Module**:
+- **Upcycle Old Devices**: Specifically optimized for legacy devices and old browsers, giving your idle tablets a new life.
+- **Full-Screen Photo Frame**: Allows users to upload one or more local images to be used as a background slideshow with a fade effect.
+- **Integrated Info Widget**: A single, floating multi-function widget at the bottom of the screen that combines the clock and weather.
+- **Real-time Clock**: Displays the current date, day of the week, and time (down to the second).
+- **Weather Module**:
     - **Fixed Location**: Weather data is hardcoded for Copenhagen, Denmark.
     - **Current Conditions**: Shows the current weather icon, temperature, wind direction, and wind speed (in m/s).
-    - **3-Day Forecast**: Cleanly displays the weather trend for the next three days (icon, max/min temperature).
-    - **Interactive Hourly Forecast**:
-        - The weather widget can be **clicked to expand/collapse** a detailed hourly forecast view.
-        - The hourly forecast displays a **rolling 8-hour window** starting from the current hour.
-        - Each hourly item includes the weather icon, temperature, a rotated wind-direction arrow, and wind speed.
+    - **3-Day Forecast**: Cleanly displays the weather trend for the next three days.
+    - **Interactive Hourly Forecast**: Can be clicked to expand/collapse a rolling 8-hour forecast starting from the current hour.
 
 ## 🚀 How to Use
 
-1.  Ensure the three files (`dashboard.html`, `dashboard.css`, and `dashboard.js`) are in the same folder.
-2.  Open the `dashboard.html` file in a modern web browser (e.g., Chrome, Firefox, Safari).
-3.  Click the `+` button in the bottom-right corner to upload your own background images.
-4.  Click the weather widget area to expand or collapse the hourly forecast.
+1.  On your device (especially an old iPad), open a browser and go to the live URL: **[https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
+2.  Click the `+` button in the bottom-right corner to upload your own photos.
+3.  Click the weather widget area to expand or collapse the hourly forecast.
+3.  **Recommended**: Use the browser's "Add to Home Screen" feature to create a shortcut on your desktop, allowing you to launch it like a native app.
+
+## Compatibility Notes
+
+To successfully run on extremely old devices like the original iPad mini (iOS 9.3.5), this project underwent a deep compatibility refactoring:
+
+- **Code Standard**: The entire JavaScript codebase has been rewritten in ES5, replacing all modern syntax (e.g., `fetch`, `let`, `const`, `=>`).
+- **CSS Compatibility**: Performance-sensitive effects like `backdrop-filter` were removed, and `-webkit-` prefixes were added to Flexbox properties for legacy Safari compatibility.
+- **Feature Trade-offs**: A feature to automatically switch layouts based on device orientation was attempted. However, testing proved this feature was too demanding for older devices and caused script crashes. Therefore, **this feature has been removed** to ensure the stability of core functionalities.
 
 ## 🛠️ Technology Stack
 
 - **HTML5**
-- **CSS3**: Flexbox, Grid, Transitions, Animations, `backdrop-filter`
-- **Vanilla JavaScript (ES6+)**: `fetch` API, `File` API, `URL.createObjectURL`
+- **CSS3**: Flexbox (with `-webkit-` prefixes), Transitions
+- **Vanilla JavaScript (ES5)**: `XMLHttpRequest`
+
+## Roadmap
+
+- **User-Defined Location**: A new "Locate Me" feature is planned to allow users to grant permission for the browser to get their current location and automatically load local weather conditions. The location will be saved locally for future visits.
