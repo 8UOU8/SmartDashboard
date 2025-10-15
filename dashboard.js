@@ -1,7 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
     initWeather();
     initImageWidget();
+    initOrientationHandler();
 });
+
+function initOrientationHandler() {
+    var mql = window.matchMedia('(orientation: landscape)');
+
+    function handleOrientationChange(mql) {
+        if (mql.matches) {
+            document.body.classList.add('landscape-mode');
+        } else {
+            document.body.classList.remove('landscape-mode');
+        }
+    }
+
+    // Register the listener
+    mql.addListener(handleOrientationChange);
+
+    // Call handler once initially
+    handleOrientationChange(mql);
+}
 
 function getWeatherIcon(code) {
     if (code === 0) return '☀️';
@@ -34,10 +53,9 @@ function initWeather() {
     var lat = 55.6759;
     var lon = 12.5655;
     var weatherUrl = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max,winddirection_10m_dominant&hourly=temperature_2m,weathercode,windspeed_10m,winddirection_10m&forecast_days=4&timezone=auto&windspeed_unit=ms';
-    var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(weatherUrl);
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', proxyUrl, true);
+    xhr.open('GET', weatherUrl, true);
     xhr.timeout = 20000; // 20 seconds timeout
 
     xhr.onload = function () {
@@ -55,7 +73,7 @@ function initWeather() {
             var currentWindDir = windDirection(current.winddirection);
             var currentWeatherCode = current.weathercode;
 
-            var mainHtml = '<div class="main-weather-content"><div class="current-weather-side"><div class="weather-icon-large">' + getWeatherIcon(currentWeatherCode) + '</div><div class="temp-large">' + currentTemp + '°</div><div class="location-info"><div id="time"></div><div id="date"></div><div>哥本哈根</div><div class="wind-info">' + currentWindDir + ' ' + currentWindSpeed + ' m/s</div></div></div><div class="forecast-side">';
+            let mainHtml = '<div class="main-weather-content"><div class="current-weather-side"><div class="location-info"><div id="time"></div><div id="date"></div><div>哥本哈根</div><div class="wind-info">' + currentWindDir + ' ' + currentWindSpeed + ' m/s</div></div><div class="current-weather-visuals"><div class="weather-icon-large">' + getWeatherIcon(currentWeatherCode) + '</div><div class="temp-large">' + currentTemp + '°</div></div></div><div class="forecast-side">';
             for (var i = 1; i < 4; i++) {
                 var day = data.daily;
                 var date = new Date(day.time[i]);
