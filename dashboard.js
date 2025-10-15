@@ -7,11 +7,17 @@ document.addEventListener('DOMContentLoaded', function () {
 function initOrientationHandler() {
     var mql = window.matchMedia('(orientation: landscape)');
 
+    function hasClass(el, cls) {
+        return (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+
     function handleOrientationChange(mql) {
         if (mql.matches) {
-            document.body.classList.add('landscape-mode');
+            if (!hasClass(document.body, 'landscape-mode')) {
+                document.body.className += ' landscape-mode';
+            }
         } else {
-            document.body.classList.remove('landscape-mode');
+            document.body.className = document.body.className.replace(/\s*\blandscape-mode\b/g, '');
         }
     }
 
@@ -115,11 +121,13 @@ function initWeather() {
             updateClock();
             setInterval(updateClock, 1000);
 
+            // Add click listener to toggle 'expanded' class
             weatherWidget.addEventListener('click', function () {
-                if (weatherWidget.classList.contains('expanded')) {
-                    weatherWidget.classList.remove('expanded');
+                var hasExpandedClass = (' ' + weatherWidget.className + ' ').indexOf(' expanded ') > -1;
+                if (hasExpandedClass) {
+                    weatherWidget.className = weatherWidget.className.replace(/\s*\bexpanded\b/g, '');
                 } else {
-                    weatherWidget.classList.add('expanded');
+                    weatherWidget.className += ' expanded';
                 }
             });
         } else {
