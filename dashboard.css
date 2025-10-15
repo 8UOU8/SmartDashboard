@@ -7,7 +7,7 @@ body {
     padding: 10px;
     height: 100vh;
     box-sizing: border-box;
-    overflow: hidden; /* Prevents scrollbars on iPad */
+    overflow: hidden;
 }
 
 /* Background Slideshow Container */
@@ -23,8 +23,9 @@ body {
 #slideshow-image {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Change from cover to contain */
-    transition: opacity 1s ease-in-out; /* Fade transition */
+    object-fit: contain;
+    -webkit-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
 }
 
 /* Dark overlay for readability */
@@ -39,56 +40,66 @@ body::before {
     z-index: -1;
 }
 
-/* Dashboard Grid Layout - now a flex container at the bottom */
+/* Dashboard container at the bottom */
 #dashboard-grid {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
     justify-content: center;
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
     align-items: flex-end;
-    gap: 20px;
 }
 
 /* General Widget Styles */
 .widget {
-    background-color: rgba(0, 0, 0, 0.35); /* Slightly more background for readability */
-    backdrop-filter: blur(12px); 
-    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(0, 0, 0, 0.45);
     border-radius: 15px;
     padding: 15px;
     box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
     flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
     text-align: center;
-    flex-shrink: 0; /* Prevent widgets from shrinking */
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 /* New styles for time/date inside weather widget */
 #time {
-    font-size: 1.8rem; /* Smaller font */
+    font-size: 1.8rem;
     font-weight: 500;
     line-height: 1.1;
 }
 
 #date {
-    font-size: 0.8rem; /* Smaller font */
+    font-size: 0.8rem;
     font-weight: 300;
     margin-bottom: 5px;
 }
 
 /* Weather Widget */
 #weather-widget {
-    font-size: 1rem; /* Base font size */
-    display: flex;
-    flex-direction: column; /* Stack main content and hourly forecast vertically */
-    gap: 10px;
-    padding: 15px 25px;
+    font-size: 1rem;
     cursor: pointer;
+    -webkit-transition: all 0.4s ease;
     transition: all 0.4s ease;
 }
 
@@ -99,36 +110,51 @@ body::before {
     right: 15px;
     font-size: 1.2rem;
     color: rgba(255, 255, 255, 0.5);
+    -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
+    -webkit-transition: -webkit-transform 0.4s ease;
     transition: transform 0.4s ease;
 }
 
 #weather-widget.expanded::after {
+    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
 }
 
 .main-weather-content {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
     flex-direction: row;
-    align-items: stretch; /* Make children fill height */
-    gap: 20px;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    align-items: stretch;
 }
 
 .current-weather-side {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
-    gap: 15px;
     border-right: 1px solid rgba(255, 255, 255, 0.2);
     padding-right: 20px;
+    margin-right: 20px;
 }
 
 .weather-icon-large {
     font-size: 3rem;
+    margin-right: 15px;
 }
 
 .temp-large {
     font-size: 2.5rem;
     font-weight: 500;
+    margin-right: 15px;
 }
 
 .location-info {
@@ -141,16 +167,25 @@ body::before {
 }
 
 .forecast-side {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
-    gap: 20px;
 }
 
 .forecast-day {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
-    gap: 5px;
+    margin-right: 20px;
 }
+.forecast-day > div { margin-bottom: 5px; }
 
 .weather-icon-small {
     font-size: 1.8rem;
@@ -158,38 +193,50 @@ body::before {
 
 /* Hourly Forecast Styling */
 .hourly-forecast {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
-    gap: 15px;
     max-height: 0;
     overflow: hidden;
+    -webkit-transition: max-height 0.4s ease-in-out;
     transition: max-height 0.4s ease-in-out;
 }
 
 #weather-widget.expanded .hourly-forecast {
-    max-height: 130px; /* Increased height to reveal the content */
+    max-height: 130px;
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
-    overflow-x: auto; /* Allow horizontal scroll if needed */
+    overflow-x: auto;
 }
 
 .hourly-item {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
-    gap: 5px;
-    font-size: 0.9rem;
-    min-width: 50px; /* Give items a minimum width */
+    min-width: 50px;
+    margin-right: 15px;
 }
+.hourly-item > div { margin-bottom: 5px; }
 
 .hourly-wind {
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
     align-items: center;
-    gap: 5px;
-    font-size: 0.8rem;
 }
+.hourly-wind > span { margin-right: 5px; }
 
 .wind-arrow {
-    display: inline-block; /* Needed for transform to work */
+    display: inline-block;
     font-size: 1rem;
     line-height: 1;
 }
@@ -211,6 +258,7 @@ body::before {
     border: none;
     border-radius: 50%;
     cursor: pointer;
+    -webkit-transition: background-color 0.3s;
     transition: background-color 0.3s;
     text-align: center;
     padding: 0;

@@ -1,182 +1,145 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all widgets
+document.addEventListener('DOMContentLoaded', function () {
     initWeather();
     initImageWidget();
 });
 
-/**
- * Clock functionality is now initialized within initWeather after elements are created.
- */
+function getWeatherIcon(code) {
+    if (code === 0) return '☀️';
+    if (code >= 1 && code <= 3) return '☁️';
+    if (code >= 45 && code <= 48) return '🌫️';
+    if (code >= 51 && code <= 67) return '🌧️';
+    if (code >= 71 && code <= 77) return '❄️';
+    if (code >= 80 && code <= 82) return '🌦️';
+    if (code >= 95 && code <= 99) return '⛈️';
+    return '🌍';
+}
 
-/**
- * Weather Widget
- */
-/**
- * Weather Widget
- */
-/**
- * Weather Widget
- */
+function getDayOfWeek(date) {
+    var weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    return weekdays[date.getDay()];
+}
+
+function windDirection(degrees) {
+    var directions = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+    var index = Math.round(degrees / 45) % 8;
+    return directions[index];
+}
+
+function pad(num) {
+    return num < 10 ? '0' + num : String(num);
+}
+
 function initWeather() {
-    const weatherWidget = document.getElementById('weather-widget');
-    const lat = 55.6759; // Copenhagen latitude
-    const lon = 12.5655; // Copenhagen longitude
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max,winddirection_10m_dominant&hourly=temperature_2m,weathercode,windspeed_10m,winddirection_10m&forecast_days=4&timezone=auto&windspeed_unit=ms`;
+    var weatherWidget = document.getElementById('weather-widget');
+    var lat = 55.6759;
+    var lon = 12.5655;
+    var weatherUrl = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max,winddirection_10m_dominant&hourly=temperature_2m,weathercode,windspeed_10m,winddirection_10m&forecast_days=4&timezone=auto&windspeed_unit=ms';
+    var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(weatherUrl);
 
-    fetch(weatherUrl)
-        .then(response => response.json())
-        .then(data => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', proxyUrl, true);
+    xhr.timeout = 20000; // 20 seconds timeout
+
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 400) {
+            var data = JSON.parse(xhr.responseText);
+
             if (!data || !data.current_weather || !data.daily || !data.hourly) {
                 weatherWidget.textContent = '天气数据不完整';
                 return;
             }
 
-            // --- MAIN WEATHER CONTENT (Current + 3-Day) --- //
-            const current = data.current_weather;
-            const currentTemp = Math.round(current.temperature);
-            const currentWindSpeed = Math.round(current.windspeed);
-            const currentWindDir = windDirection(current.winddirection);
-            const currentWeatherCode = current.weathercode;
+            var current = data.current_weather;
+            var currentTemp = Math.round(current.temperature);
+            var currentWindSpeed = Math.round(current.windspeed);
+            var currentWindDir = windDirection(current.winddirection);
+            var currentWeatherCode = current.weathercode;
 
-            let mainHtml = `<div class="main-weather-content">
-                              <div class="current-weather-side">
-                                <div class="weather-icon-large">${getWeatherIcon(currentWeatherCode)}</div>
-                                <div class="temp-large">${currentTemp}°</div>
-                                <div class="location-info">
-                                    <div id="time"></div>
-                                    <div id="date"></div>
-                                    <div>哥本哈根</div>
-                                    <div class="wind-info">${currentWindDir} ${currentWindSpeed} m/s</div>
-                                </div>
-                              </div>
-                              <div class="forecast-side">`;
-            for (let i = 1; i < 4; i++) {
-                const day = data.daily;
-                const date = new Date(day.time[i]);
-                mainHtml += `<div class="forecast-day">
-                                 <div>${getDayOfWeek(date)}</div>
-                                 <div class="weather-icon-small">${getWeatherIcon(day.weathercode[i])}</div>
-                                 <div>${Math.round(day.temperature_2m_max[i])}° / ${Math.round(day.temperature_2m_min[i])}°</div>
-                             </div>`;
+            var mainHtml = '<div class="main-weather-content"><div class="current-weather-side"><div class="weather-icon-large">' + getWeatherIcon(currentWeatherCode) + '</div><div class="temp-large">' + currentTemp + '°</div><div class="location-info"><div id="time"></div><div id="date"></div><div>哥本哈根</div><div class="wind-info">' + currentWindDir + ' ' + currentWindSpeed + ' m/s</div></div></div><div class="forecast-side">';
+            for (var i = 1; i < 4; i++) {
+                var day = data.daily;
+                var date = new Date(day.time[i]);
+                mainHtml += '<div class="forecast-day"><div>' + getDayOfWeek(date) + '</div><div class="weather-icon-small">' + getWeatherIcon(day.weathercode[i]) + '</div><div>' + Math.round(day.temperature_2m_max[i]) + '° / ' + Math.round(day.temperature_2m_min[i]) + '°</div></div>';
             }
-            mainHtml += `</div></div>`;
+            mainHtml += '</div></div>';
 
-            // --- HOURLY FORECAST CONTENT (Initially hidden) --- //
-            let hourlyHtml = '<div class="hourly-forecast">';
-            
-            // Find the index of the first forecast hour that is at or after the current time
-            let startIndex = -1;
-            const currentTime = new Date(data.current_weather.time);
-            for (let i = 0; i < data.hourly.time.length; i++) {
-                if (new Date(data.hourly.time[i]) >= currentTime) {
-                    startIndex = i;
+            var hourlyHtml = '<div class="hourly-forecast">';
+            var startIndex = -1;
+            var currentTime = new Date(data.current_weather.time);
+            for (var j = 0; j < data.hourly.time.length; j++) {
+                if (new Date(data.hourly.time[j]) >= currentTime) {
+                    startIndex = j;
                     break;
                 }
             }
 
             if (startIndex !== -1) {
-                for (let i = startIndex; i < startIndex + 8 && i < data.hourly.time.length; i++) {
-                    const hour = data.hourly.time[i].slice(11, 13);
-                    const temp = Math.round(data.hourly.temperature_2m[i]);
-                    const weatherCode = data.hourly.weathercode[i];
-                    const windSpeed = Math.round(data.hourly.windspeed_10m[i]);
-                    const windDir = data.hourly.winddirection_10m[i];
-
-                    hourlyHtml += `<div class="hourly-item">
-                                     <div>${hour}:00</div>
-                                     <div class="weather-icon-small">${getWeatherIcon(weatherCode)}</div>
-                                     <div>${temp}°</div>
-                                     <div class="hourly-wind">
-                                        <span class="wind-arrow" style="transform: rotate(${windDir}deg)">↑</span>
-                                        <span>${windSpeed}</span>
-                                     </div>
-                                 </div>`;
+                for (var k = startIndex; k < startIndex + 8 && k < data.hourly.time.length; k++) {
+                    var hour = data.hourly.time[k].slice(11, 13);
+                    var temp = Math.round(data.hourly.temperature_2m[k]);
+                    var weatherCode = data.hourly.weathercode[k];
+                    var windSpeed = Math.round(data.hourly.windspeed_10m[k]);
+                    var windDir = data.hourly.winddirection_10m[k];
+                    hourlyHtml += '<div class="hourly-item"><div>' + hour + ':00</div><div class="weather-icon-small">' + getWeatherIcon(weatherCode) + '</div><div>' + temp + '°</div><div class="hourly-wind"><span class="wind-arrow" style="-webkit-transform: rotate(' + windDir + 'deg); transform: rotate(' + windDir + 'deg);">↑</span><span>' + windSpeed + '</span></div></div>';
                 }
             }
             hourlyHtml += '</div>';
 
-            // Combine and set HTML
             weatherWidget.innerHTML = mainHtml + hourlyHtml;
 
-            // --- START CLOCK --- //
-            const timeEl = document.getElementById('time');
-            const dateEl = document.getElementById('date');
-        
+            var timeEl = document.getElementById('time');
+            var dateEl = document.getElementById('date');
             function updateClock() {
-                const now = new Date();
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                timeEl.textContent = `${hours}:${minutes}:${seconds}`;
-        
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
-                dateEl.textContent = `${year}年${month}月${day}日 ${weekday}`;
+                var now = new Date();
+                timeEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+                dateEl.textContent = now.getFullYear() + '年' + pad(now.getMonth() + 1) + '月' + pad(now.getDate()) + '日 ' + getDayOfWeek(now);
             }
-        
             updateClock();
             setInterval(updateClock, 1000);
 
-            // Add click listener to toggle 'expanded' class
-            weatherWidget.addEventListener('click', () => {
-                weatherWidget.classList.toggle('expanded');
+            weatherWidget.addEventListener('click', function () {
+                if (weatherWidget.classList.contains('expanded')) {
+                    weatherWidget.classList.remove('expanded');
+                } else {
+                    weatherWidget.classList.add('expanded');
+                }
             });
-        })
-        .catch(error => {
-            console.error('Error fetching weather:', error);
+        } else {
             weatherWidget.textContent = '无法加载天气';
-        });
+        }
+    };
+    xhr.onerror = function () {
+        weatherWidget.textContent = '网络错误';
+    };
+    xhr.ontimeout = function () {
+        weatherWidget.textContent = '网络超时，请刷新';
+    };
+    xhr.send();
 }
 
-function getDayOfWeek(date) {
-    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-    return weekdays[date.getDay()];
-}
-
-function windDirection(degrees) {
-    const directions = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
-    const index = Math.round(degrees / 45) % 8;
-    return directions[index];
-}
-
-function getWeatherIcon(code) {
-    // Simple mapping from weather code to emoji
-    if (code === 0) return '☀️'; // Clear sky
-    if (code >= 1 && code <= 3) return '☁️'; // Mainly clear, partly cloudy, and overcast
-    if (code >= 45 && code <= 48) return '🌫️'; // Fog
-    if (code >= 51 && code <= 67) return '🌧️'; // Drizzle, Rain
-    if (code >= 71 && code <= 77) return '❄️'; // Snow
-    if (code >= 80 && code <= 82) return '🌦️'; // Rain showers
-    if (code >= 95 && code <= 99) return '⛈️'; // Thunderstorm
-    return '🌍'; // Default
-}
-
-
-/**
- * Background Image Slideshow Widget
- */
 function initImageWidget() {
-    const uploadBtn = document.getElementById('upload-btn');
-    const imageUpload = document.getElementById('image-upload');
-    const slideshowImage = document.getElementById('slideshow-image');
+    var uploadBtn = document.getElementById('upload-btn');
+    var imageUpload = document.getElementById('image-upload');
+    var slideshowImage = document.getElementById('slideshow-image');
+    var images = [];
+    var currentImageIndex = 0;
+    var slideshowInterval = null;
 
-    let images = [];
-    let currentImageIndex = 0;
-    let slideshowInterval = null;
-
-    // Set initial opacity to 0
     slideshowImage.style.opacity = 0;
 
-    uploadBtn.addEventListener('click', () => imageUpload.click());
+    uploadBtn.addEventListener('click', function () {
+        imageUpload.click();
+    });
 
-    imageUpload.addEventListener('change', (event) => {
+    imageUpload.addEventListener('change', function (event) {
         if (event.target.files.length === 0) return;
 
-        // Clean up old object URLs to free memory
-        images.forEach(URL.revokeObjectURL);
-        images = Array.from(event.target.files).map(file => URL.createObjectURL(file));
+        images.forEach(function(imgUrl) { URL.revokeObjectURL(imgUrl); });
+        images = [];
+
+        for (var i = 0; i < event.target.files.length; i++) {
+            images.push(URL.createObjectURL(event.target.files[i]));
+        }
 
         if (images.length > 0) {
             currentImageIndex = 0;
@@ -191,19 +154,15 @@ function initImageWidget() {
 
         function showNextImage() {
             if (images.length === 0) return;
-            
-            // Fade out
             slideshowImage.style.opacity = 0;
-
-            // Wait for fade out to complete, then change image and fade in
-            setTimeout(() => {
+            setTimeout(function () {
                 slideshowImage.src = images[currentImageIndex];
                 slideshowImage.style.opacity = 1;
                 currentImageIndex = (currentImageIndex + 1) % images.length;
-            }, 1000); // Must match the CSS transition duration
+            }, 1000);
         }
 
-        showNextImage(); // Show the first image immediately
-        slideshowInterval = setInterval(showNextImage, 6000); // Change image every 6s (5s display + 1s fade)
+        showNextImage();
+        slideshowInterval = setInterval(showNextImage, 6000);
     }
 }
