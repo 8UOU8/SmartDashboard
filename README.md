@@ -2,7 +2,9 @@
 
 **线上访问地址: [https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
 
-这是一个轻量级的、无需后端、可本地运行的个人信息面板网页。项目的主要目标是将旧的、性能不足的平板设备（如第一代 iPad mini）改造为一个功能丰富的**电子相册**和信息中心。
+一个基于原生JavaScript (ES5) 的轻量级个人信息面板，旨在将旧平板电脑（如第一代iPad mini）改造为集电子相册、时钟和天气预报于一体的墙面信息中心。
+
+项目无需后端、可完全在本地运行，专为性能不足的旧设备和老版本浏览器（如 iOS 9）优化，是您改造闲置电子设备（kiosk、数字标牌等）的理想选择。
 
 ## ✨ 功能特性
 
@@ -47,7 +49,9 @@
 
 **Live Demo: [https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
 
-A lightweight, serverless, locally-run personal dashboard webpage. The primary goal of this project is to repurpose old, underpowered tablet devices (like the original iPad mini) into a feature-rich **digital photo frame** and information hub.
+A lightweight personal dashboard built with vanilla JavaScript (ES5), designed to upcycle old tablets (like the original iPad mini) into a wall-mounted information hub with a digital photo frame, clock, and weather forecast.
+
+This serverless project runs entirely on the client-side and is optimized for underpowered legacy devices and old browsers (like iOS 9), making it an ideal choice for repurposing e-waste into a kiosk, digital sign, or personal display.
 
 ## ✨ Features
 
@@ -65,7 +69,7 @@ A lightweight, serverless, locally-run personal dashboard webpage. The primary g
 
 1.  On your device (especially an old iPad), open a browser and go to the live URL: **[https://display.8uou8.com/dashboard.html](https://display.8uou8.com/dashboard.html)**
 2.  Click the `+` button in the bottom-right corner to upload your own photos.
-3.  Click the weather widget area to expand or collapse the hourly forecast.
+3.  Click the weather widget area to expand or. collapse the hourly forecast.
 3.  **Recommended**: Use the browser's "Add to Home Screen" feature to create a shortcut on your desktop, allowing you to launch it like a native app.
 
 ## Compatibility Notes
