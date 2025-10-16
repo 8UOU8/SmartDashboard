@@ -80,7 +80,7 @@ function initWeather() {
                     var weatherCode = data.hourly.weathercode[k];
                     var windSpeed = Math.round(data.hourly.windspeed_10m[k]);
                     var windDir = data.hourly.winddirection_10m[k];
-                    hourlyHtml += '<div class="hourly-item"><div>' + hour + ':00</div><div class="weather-icon-small">' + getWeatherIcon(weatherCode) + '</div><div>' + temp + '°</div><div class="hourly-wind"><span class="wind-arrow" style="-webkit-transform: rotate(' + windDir + 'deg); transform: rotate(' + windDir + 'deg);">↑</span><span>' + windSpeed + '</span></div></div>';
+                    hourlyHtml += '<div class="hourly-item"><div>' + hour + ':00</div><div class="weather-icon-small">' + getWeatherIcon(weatherCode) + '</div><div>' + temp + '°</div><div class="hourly-wind"><span class="wind-arrow" style="-webkit-transform: rotate(' + windDir + 'deg); transform: rotate(' + windDir + 'deg);">↓</span><span>' + windSpeed + '</span></div></div>';
                 }
             }
             hourlyHtml += '</div>';
